@@ -12,12 +12,12 @@ module Rues
             res = Rues::Cmd.exec(add_cmd, param, param.debug)
 
             if res == 0
-              puts "#{u} is successfully added"
+              hl_info "#{u} is successfully added"
             else
-              puts "Fail to add #{u}"
+              hl_error "Fail to add #{u}"
             end
           else
-            puts "#{u} already exists. Skip adding..."
+            hl_info "#{u} already exists. Skip adding..."
           end
         end
       end

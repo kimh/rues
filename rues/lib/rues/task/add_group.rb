@@ -9,12 +9,12 @@ module Rues
         if 0 != Rues::Cmd.exec(check_cmd, param, param.debug)
           res = Rues::Cmd.exec(add_cmd, param, param.debug)
           if res == 0
-            puts "#{group} is succesfully added"
+            hl_info "#{group} is succesfully added"
           else
-            puts "Fail to add #{group}"
+            hl_error "Fail to add #{group}"
           end
         else
-          puts "#{group} already exists. Skip adding..."
+          hl_info "#{group} already exists. Skip adding..."
         end
       end
     end

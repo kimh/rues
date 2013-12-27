@@ -8,10 +8,10 @@ module Rues
           install_cmd  = "sudo apt-get install #{packages}"
 
           if 0 != Rues::Cmd.exec(check_cmd, param, param.debug)
-            puts "Installing #{package}"
+            hl_info "Installing #{package}"
             Rues::Cmd.exec(install_cmd, param, param.debug)
           else
-            puts "#{package} already installed. Skipping..."
+            hl_info "#{package} already installed. Skipping..."
           end
         end
       end

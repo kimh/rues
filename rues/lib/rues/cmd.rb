@@ -9,7 +9,7 @@ module Rues
             if success
               #puts "Successfully obtained pty"
             else
-              puts "Could not obtain pty"
+              hl_error "Could not obtain pty"
             end
           end
 
@@ -40,7 +40,7 @@ module Rues
       dst = File.join(dir, File.basename(file) + "_#{Time.now.strftime("%Y%m%d%H%M%S")}")
       command = "mkdir -p #{dir}; sudo cp -r #{file} #{dst}"
       if 0 != Rues::Cmd.exec(command, param)
-        puts "Backup of #{file} failed"
+        hl_error "Backup of #{file} failed"
       end
     end
 
