@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+require "thor"
+require "net/ssh"
+require "rues"
+
+module Rues
+class CLI < Thor
+
+  include Rues::Task
+
+  option :host
+  option :username
+  option :user
+  option :group
+  option :bootstrap, :type => :boolean
+  option :debug, :type => :boolean
+
+  desc "add user", "Adding users"
+  def add(users)
+    users = users.split(" ")
+    host = options[:host]
+    user = options[:user]
+    password = "hoge"
+    param = SSHParam.new(host, user, password, options[:debug])
+
+    pam_config =
+    "
+    ".gsub!(/^\s*/,"")
+
+    sudo_config =
+    "Defaults	env_reset
+     root      ALL=(ALL) ALL
+     hoge      ALL=(ALL) ALL
+     vagrant   ALL=(ALL) ALL
+     %sudo     ALL=(ALL) ALL
+     %admin    ALL=(ALL) ALL
+     update    ALL=NOPASSWD: /usr/bin/apt-get, /usr/bin/aptitude".gsub!(/^\s*/,"")
+
+    if options[:bootstrap]
+      AptGetInstall.do(["libpam-cracklib"], param)
+      PAMSetup.do(pam_config, param, "/tmp/rues.txt")
+      AddGroup.do("vagrant", param)
+      AddSudoers.do(sudo_config, param)
+    end
+
+    Rues::Task::AddUser.do(users, "vagrant", "password", param)
+
+  end
+
+end
+end
+
+Rues::CLI.start(ARGV)
